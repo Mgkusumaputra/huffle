@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const plusjakartasans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Huffle",
@@ -16,7 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={plusjakartasans.className}>
+        <main className="flex flex-col my-4 mx-auto max-w-2xl max-sm:px-5">
+          <Navbar />
+          <div className="px-5 mb-24">{children}</div>
+          <Footer />
+        </main>
+      </body>
     </html>
   );
 }

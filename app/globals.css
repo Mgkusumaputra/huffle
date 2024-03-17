@@ -26,6 +26,11 @@
     --radius: 0.75rem;
   }
 
+  ::selection {
+    color: hsl(var(--primary-foreground));
+    background: hsl(var(--primary));
+  }
+
   .dark {
     --background: 20 14.3% 4.1%;
     --foreground: 60 9.1% 97.8%;
@@ -57,3 +62,4 @@
     @apply bg-background text-foreground;
   }
 }
+
