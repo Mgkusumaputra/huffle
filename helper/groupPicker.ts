@@ -1,15 +1,8 @@
-import { GroupPickerDistributionMethod } from "@/types";
+import { GroupPickerDistributionMethod, RandomPickerOptions } from "@/types";
 
 interface Person {
   name: string;
   gender: "male" | "female";
-}
-
-interface RandomPickerOptions {
-  numberOfGroups?: number;
-  maxMembersPerGroup?: number;
-  pickRepresentative?: boolean;
-  distributionMethod?: GroupPickerDistributionMethod;
 }
 
 export function randomGroupPicker(
@@ -22,6 +15,7 @@ export function randomGroupPicker(
     pickRepresentative,
     distributionMethod,
   } = options;
+
   let groups: Person[][] = [];
   let remainingPeople = [...people];
 

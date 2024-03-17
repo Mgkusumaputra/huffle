@@ -4,4 +4,11 @@ const GroupPickerDistributionMethod = {
 } as const;
 
 export type GroupPickerDistributionMethod =
-  keyof typeof GroupPickerDistributionMethod;
+  (typeof GroupPickerDistributionMethod)[keyof typeof GroupPickerDistributionMethod];
+
+export interface RandomPickerOptions {
+  numberOfGroups?: number;
+  maxMembersPerGroup?: number;
+  pickRepresentative?: boolean;
+  distributionMethod?: GroupPickerDistributionMethod;
+}
