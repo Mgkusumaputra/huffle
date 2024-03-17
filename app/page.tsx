@@ -1,13 +1,7 @@
 import Card from "@/components/home/card";
 import { Badge } from "@/components/ui/badge";
+import { CARD_FEATURES } from "@/constant";
 import Link from "next/link";
-
-const DUMMY_CARD = [
-  { title: "Huffle Kelompok", href: "/kelompok" },
-  { title: "Huffle Piket", href: "/piket" },
-  { title: "Huffle Nama", href: "/nama" },
-  { title: "Huffle Angka", href: "/angka" },
-];
 
 export default function Home() {
   return (
@@ -26,7 +20,7 @@ export default function Home() {
         </p>
       </div>
       <div className="flex flex-col items-center gap-3 mt-6">
-        {DUMMY_CARD.map((data, index) => (
+        {CARD_FEATURES.map((data, index) => (
           <Card key={index} title={data.title} href={data.href} />
         ))}
         <Badge className="w-max mt-4">
