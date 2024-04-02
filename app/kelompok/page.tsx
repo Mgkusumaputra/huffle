@@ -202,7 +202,7 @@ export default function Kelompok() {
         </Form>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-3 gap-y-5 text-primary-foreground mt-7">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5 text-primary-foreground mt-7">
         {generatedGroups.map((group, index) => (
           <CardResult
             key={index}
