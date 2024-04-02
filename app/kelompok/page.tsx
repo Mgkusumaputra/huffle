@@ -1,6 +1,8 @@
 "use client";
 
 import FieldInput from "@/components/fieldInput";
+import CardResult from "@/components/kelompok/cardResult";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -15,32 +17,50 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { randomGroupPicker } from "@/helper/groupPicker";
+import { Person, randomGroupPicker } from "@/helper/groupPicker";
 import { kelompokFormSchema } from "@/lib/form-schema";
 import { groupPickerString } from "@/lib/utils";
 import { GroupPickerDistributionMethod, RandomPickerOptions } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { SetStateAction, useEffect, useState } from "react";
+import { UseFormReturn, useForm, useFormContext } from "react-hook-form";
+import { FaShuffle } from "react-icons/fa6";
 import { z } from "zod";
+
+interface inputSchema {
+  name?: string;
+  numberOfGroup?: number;
+  maxPeoplePerGroup?: number;
+  distributionMethod?: string;
+  representative?: boolean;
+}
 
 export default function Kelompok() {
   const form = useForm<z.infer<typeof kelompokFormSchema>>({
     resolver: zodResolver(kelompokFormSchema),
   });
 
+  const [generatedGroups, setGeneratedGroups] = useState<Person[][]>([]);
+  const [nameLength, setNameLength] = useState<number>(0);
+
   const shuffleInput = async (val: z.infer<typeof kelompokFormSchema>) => {
-    const genderPicker = groupPickerString(val.name);
+    const groupPickerArray = groupPickerString(val.name);
     let options: RandomPickerOptions = {
-      numberOfGroups: val.numberOfGroup,
-      maxMembersPerGroup: val.maxPeoplePerGroup,
+      numberOfGroups: Number(val.numberOfGroup),
+      maxMembersPerGroup: Number(val.maxPeoplePerGroup),
       pickRepresentative: val.representative,
-      distributionMethod:
-        val.distributionMethod as GroupPickerDistributionMethod,
     };
-    const generatedGroups = randomGroupPicker(genderPicker, options);
-    console.log(genderPicker);
-    console.log(generatedGroups);
+    const generatedGroups = randomGroupPicker(groupPickerArray, options);
+    setGeneratedGroups(generatedGroups);
   };
+
+  const useReset = (form?: UseFormReturn<any>) => {
+    const formctx = useFormContext();
+    const { getValues, setValue } = form ?? formctx;
+    const fields = Object.keys(getValues());
+    fields.forEach((field) => setValue(field, ""));
+  };
+
   return (
     <>
       <h1 className="text-4xl text-center font-bold leading-normal">
@@ -70,9 +90,19 @@ export default function Kelompok() {
                         className="w-full"
                         placeholder="Masukan daftar nama di sini"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e.target.value);
+                          const list: string[] = e.target.value
+                            .split(/\r?\n/)
+                            .filter(String);
+                          setNameLength(list.length);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
+                    <FormDescription>
+                      Kamu memasukkan {nameLength} nama
+                    </FormDescription>
                   </FormItem>
                 )}
               />
@@ -126,43 +156,7 @@ export default function Kelompok() {
               </FieldInput>
             </div>
 
-            <div className="flex flex-row justify-around items-center w-full max-sm:flex-col max-sm:items-start max-sm:gap-3">
-              {/* Distribution Method*/}
-              <FormField
-                control={form.control}
-                name="distributionMethod"
-                render={({ field }) => (
-                  <FormItem className="space-x-3">
-                    <FormLabel className="font-semibold">
-                      Acak Berdasarkan
-                    </FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue="Default"
-                        className="flex flex-row space-x-1 max-sm:space-x-0 max-sm:flex-col max-sm:space-y-1"
-                      >
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="Default" />
-                          </FormControl>
-                          <FormLabel className="font-normal">Default</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="Gender" />
-                          </FormControl>
-                          <FormLabel className="font-normal">Gender</FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* <FieldInput title="Acak berdasarkan">
-            </FieldInput> */}
-
+            <div className="flex flex-row justify-center items-center w-full max-sm:flex-col max-sm:items-start max-sm:gap-3">
               {/* Checkbox Representative */}
               <FormField
                 control={form.control}
@@ -184,11 +178,52 @@ export default function Kelompok() {
               />
             </div>
 
-            <Button className="mt-5" type="submit">
-              Submit
+            <Button className="flex items-center gap-2 mt-5" type="submit">
+              <FaShuffle /> Huffle
+            </Button>
+            <Button
+              className="flex items-center gap-2 mt-2"
+              type="button"
+              variant="outline"
+              onClick={() => {
+                form.reset({
+                  name: "",
+                  maxPeoplePerGroup: "",
+                  numberOfGroup: "",
+                  representative: false,
+                });
+                setNameLength(0);
+                setGeneratedGroups([]);
+              }}
+            >
+              Reset
             </Button>
           </form>
         </Form>
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-3 gap-y-5 text-primary-foreground mt-7">
+        {generatedGroups.map((group, index) => (
+          <CardResult
+            key={index}
+            groupIndex={index}
+            jumlahAnggota={group.length}
+          >
+            {group.map((person, index) => (
+              <li
+                className={`flex gap-2 ${
+                  person.representative ? "font-semibold" : "font-normal"
+                }`}
+                key={index}
+              >
+                <p>{person.name}</p>
+                {person.representative && (
+                  <Badge variant="default">Ketua Kelompok</Badge>
+                )}
+              </li>
+            ))}
+          </CardResult>
+        ))}
       </div>
     </>
   );

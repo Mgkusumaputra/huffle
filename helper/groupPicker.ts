@@ -1,20 +1,15 @@
 import { GroupPickerDistributionMethod, RandomPickerOptions } from "@/types";
 
-interface Person {
+export interface Person {
   name: string;
-  gender: "male" | "female";
+  representative?: boolean;
 }
 
 export function randomGroupPicker(
   people: Person[],
   options: RandomPickerOptions
 ): Person[][] {
-  const {
-    numberOfGroups,
-    maxMembersPerGroup,
-    pickRepresentative,
-    distributionMethod,
-  } = options;
+  let { numberOfGroups, maxMembersPerGroup, pickRepresentative } = options;
 
   let groups: Person[][] = [];
   let remainingPeople = [...people];
@@ -29,7 +24,7 @@ export function randomGroupPicker(
   }
 
   // Distribute people into groups based on the selected option
-  if (numberOfGroups !== undefined) {
+  if (numberOfGroups !== 0 && numberOfGroups !== undefined) {
     const groupSize = Math.ceil(remainingPeople.length / numberOfGroups);
     for (let i = 0; i < numberOfGroups; i++) {
       const group = remainingPeople.slice(i * groupSize, (i + 1) * groupSize);
@@ -37,7 +32,7 @@ export function randomGroupPicker(
         groups.push(group);
       }
     }
-  } else if (maxMembersPerGroup !== undefined) {
+  } else if (maxMembersPerGroup !== 0) {
     while (remainingPeople.length > 0) {
       const group = remainingPeople.splice(0, maxMembersPerGroup);
       if (group.length > 0) {
@@ -55,15 +50,6 @@ export function randomGroupPicker(
         ...person,
         representative: person === representative,
       }));
-    });
-  }
-
-  // Optionally distribute groups based on the selected distribution method
-  if (distributionMethod === "Gender") {
-    groups.forEach((group) => {
-      const males = group.filter((person) => person.gender === "male");
-      const females = group.filter((person) => person.gender === "female");
-      group.splice(0, group.length, ...males, ...females);
     });
   }
 

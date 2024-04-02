@@ -7,13 +7,14 @@ export function cn(...inputs: ClassValue[]) {
 
 export function groupPickerString(
   input: string
-): { name: string; gender: "male" | "female" }[] {
-  const lines = input.trim().split("\n");
-  return lines.map((line) => {
-    const [name, gender] = line
-      .trim()
-      .split(",")
-      .map((part) => part.trim());
-    return { name, gender } as { name: string; gender: "male" | "female" };
-  });
+): { name: string; representative: boolean }[] {
+  const lines = input.split("\n");
+
+  const parsedNames = lines.map((name) => ({ name, representative: false }));
+
+  return parsedNames.flat();
+}
+
+export function SplitString(input: string): string[] {
+  return input.split(/\r?\n/).filter(String);
 }

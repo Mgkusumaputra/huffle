@@ -10,5 +10,4 @@ export interface RandomPickerOptions {
   numberOfGroups?: number;
   maxMembersPerGroup?: number;
   pickRepresentative?: boolean;
-  distributionMethod?: GroupPickerDistributionMethod;
 }
