@@ -11,3 +11,8 @@ export interface RandomPickerOptions {
   maxMembersPerGroup?: number;
   pickRepresentative?: boolean;
 }
+
+export type Hari = {
+  name: string;
+  value: boolean;
+}[];

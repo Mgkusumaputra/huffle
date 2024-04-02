@@ -2,7 +2,7 @@ import { string, z } from "zod";
 
 export const kelompokFormSchema = z
   .object({
-    name: z.string({ required_error: "Nama wajib di isi" }),
+    name: z.string().min(1, { message: "Nama wajib di isi" }),
     numberOfGroup: z.string().optional(),
     maxPeoplePerGroup: z.string().optional(),
     representative: z.boolean().default(false).optional(),
@@ -21,3 +21,10 @@ export const kelompokFormSchema = z
       path: ["numberOfGroup"],
     }
   );
+
+export const piketFormSchema = z.object({
+  name: z.string().min(1, { message: "Nama wajib di isi" }),
+  hari: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: "Pilih minimal 2 hari",
+  }),
+});
