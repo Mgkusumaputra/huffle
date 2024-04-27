@@ -28,3 +28,10 @@ export const piketFormSchema = z.object({
     message: "Pilih minimal 2 hari",
   }),
 });
+
+export const nameFormSchema = z.object({
+  name: z.string().min(1, { message: "Nama wajib di isi" }),
+  numberNameGenerated: z
+    .string()
+    .min(1, { message: "Jumlah nama wajib di isi" }),
+});
