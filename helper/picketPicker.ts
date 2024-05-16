@@ -42,28 +42,3 @@ export function randomPicketPicker(
 
   return assignments;
 }
-
-// Example usage
-const selectedDays: string[] = ["senin", "selasa", "rabu", "kamis", "jumat"];
-
-const people: Person[] = [
-  { name: "Udin" },
-  { name: "Agus" },
-  { name: "Asep" },
-  { name: "Karni" },
-  { name: "Nurul" },
-  { name: "Liat" },
-  { name: "Septi" },
-  { name: "Wahyu" },
-  { name: "Arif" },
-  { name: "Sri" },
-  { name: "Maya" },
-  { name: "Siti" },
-  { name: "Reza" },
-  { name: "Andri" },
-  { name: "Amat" },
-  { name: "Kartika" },
-];
-
-const result = randomPicketPicker(selectedDays, people);
-console.log(result);

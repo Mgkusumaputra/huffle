@@ -51,7 +51,6 @@ export default function Name() {
       Number(val.numberNameGenerated)
     );
     setGeneratedNames(nameGenerated);
-    console.log(nameGenerated);
     setIsAnimating(true);
     setDialog1Open(true);
 
