@@ -35,3 +35,16 @@ export const nameFormSchema = z.object({
     .string()
     .min(1, { message: "Jumlah nama wajib di isi" }),
 });
+
+export const angkaFormSchema = z
+  .object({
+    from: z.string().min(1, { message: "Angka wajib di isi" }),
+    to: z.string().min(1, { message: "Angka wajib di isi" }),
+    numberGenerated: z
+      .string()
+      .min(1, { message: "Jumlah angka yang di hasilkan wajib di isi" }),
+  })
+  .refine((data) => data.from < data.to || data.to > data.from, {
+    message: "Angka Tidak Valid",
+    path: ["numberGenerated"],
+  });
