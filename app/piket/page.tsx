@@ -21,10 +21,17 @@ import { piketFormSchema } from "@/lib/form-schema";
 import { Capitalize, groupPickerString } from "@/lib/utils";
 import { Hari } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Metadata } from "next";
 import { useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import { FaShuffle } from "react-icons/fa6";
 import { z } from "zod";
+
+export const metadata: Metadata = {
+  title: "Piket",
+  description:
+    "Huffle Kelompok!",
+};
 
 export default function Piket() {
   const form = useForm<z.infer<typeof piketFormSchema>>({

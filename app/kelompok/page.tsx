@@ -22,10 +22,16 @@ import { kelompokFormSchema } from "@/lib/form-schema";
 import { groupPickerString } from "@/lib/utils";
 import { GroupPickerDistributionMethod, RandomPickerOptions } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Metadata } from "next";
 import { SetStateAction, useEffect, useState } from "react";
 import { UseFormReturn, useForm, useFormContext } from "react-hook-form";
 import { FaShuffle } from "react-icons/fa6";
 import { z } from "zod";
+
+export const metadata: Metadata = {
+  title: "Kelompok",
+  description: "Huffle Kelompok!",
+};
 
 interface inputSchema {
   name?: string;
