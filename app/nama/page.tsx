@@ -30,11 +30,11 @@ import { useForm } from "react-hook-form";
 import { FaShuffle } from "react-icons/fa6";
 import { z } from "zod";
 
-export const metadata: Metadata = {
-  title: "Nama",
-  description:
-    "Huffle Nama!",
-};
+// export const metadata: Metadata = {
+//   title: "Nama",
+//   description:
+//     "Huffle Nama!",
+// };
 
 export default function Name() {
   const form = useForm<z.infer<typeof nameFormSchema>>({

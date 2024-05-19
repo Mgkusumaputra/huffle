@@ -28,10 +28,10 @@ import { UseFormReturn, useForm, useFormContext } from "react-hook-form";
 import { FaShuffle } from "react-icons/fa6";
 import { z } from "zod";
 
-export const metadata: Metadata = {
-  title: "Kelompok",
-  description: "Huffle Kelompok!",
-};
+// export const metadata: Metadata = {
+//   title: "Kelompok",
+//   description: "Huffle Kelompok!",
+// };
 
 interface inputSchema {
   name?: string;

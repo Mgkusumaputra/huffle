@@ -27,11 +27,11 @@ import { useForm } from "react-hook-form";
 import { FaShuffle } from "react-icons/fa6";
 import { z } from "zod";
 
-export const metadata: Metadata = {
-  title: "Angka",
-  description:
-    "Huffle Angka!",
-};
+// export const metadata: Metadata = {
+//   title: "Angka",
+//   description:
+//     "Huffle Angka!",
+// };
 
 export default function Angka() {
   const form = useForm<z.infer<typeof angkaFormSchema>>({

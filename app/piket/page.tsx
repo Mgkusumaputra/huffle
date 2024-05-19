@@ -27,11 +27,11 @@ import { useForm, useFormContext } from "react-hook-form";
 import { FaShuffle } from "react-icons/fa6";
 import { z } from "zod";
 
-export const metadata: Metadata = {
-  title: "Piket",
-  description:
-    "Huffle Kelompok!",
-};
+// export const metadata: Metadata = {
+//   title: "Piket",
+//   description:
+//     "Huffle Kelompok!",
+// };
 
 export default function Piket() {
   const form = useForm<z.infer<typeof piketFormSchema>>({
