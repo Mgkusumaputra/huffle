@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { UmamiScript } from "@/components/umamiScript";
 
 const plusjakartasans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -41,6 +42,7 @@ export default function RootLayout({
           <div className="px-5 mb-24">{children}</div>
           <Footer />
         </main>
+        <UmamiScript />
       </body>
     </html>
   );
