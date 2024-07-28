@@ -21,6 +21,8 @@ import { piketFormSchema } from "@/lib/form-schema";
 import { Capitalize, groupPickerString } from "@/lib/utils";
 import { Hari } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useToPng } from "@hugocxl/react-to-image";
+import { BadgeCheck, Download } from "lucide-react";
 import { Metadata } from "next";
 import { useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
@@ -54,6 +56,21 @@ export default function Piket() {
     const generatedGroups = randomPicketPicker(selectedDays, groupPickerArray);
     setGeneratedGroups(generatedGroups);
   };
+
+  const groupsGenerated = generatedGroups.length > 0;
+
+  // Image Download Handler
+  const [{ isSuccess }, convert] = useToPng<HTMLDivElement>({
+    selector: "#generatedGroup",
+    backgroundColor: "#FFFFFF",
+    onError: (error) => console.log("Error:", error),
+    onSuccess: (data) => {
+      const link = document.createElement("a");
+      link.download = "daftar-piket.png";
+      link.href = data;
+      link.click();
+    },
+  });
 
   return (
     <>
@@ -173,21 +190,40 @@ export default function Piket() {
         </Form>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5 text-primary-foreground mt-7">
-        {generatedGroups.map((group, index) => (
-          <CardResult
-            key={index}
-            groupName={Capitalize(group[0])}
-            jumlahAnggota={group[1].length}
+      {groupsGenerated && (
+        <div className="flex flex-col gap-4">
+          <div
+            id="generatedGroup"
+            className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5 text-primary-foreground py-7"
           >
-            {group[1].map((person: Person, personIndex: number) => (
-              <li className={`flex gap-2 font-normal`} key={personIndex}>
-                <p>{person.name}</p>
-              </li>
+            {generatedGroups.map((group, index) => (
+              <CardResult
+                key={index}
+                groupName={Capitalize(group[0])}
+                jumlahAnggota={group[1].length}
+              >
+                {group[1].map((person: Person, personIndex: number) => (
+                  <li className={`flex gap-2 font-normal`} key={personIndex}>
+                    <p>{person.name}</p>
+                  </li>
+                ))}
+              </CardResult>
             ))}
-          </CardResult>
-        ))}
-      </div>
+          </div>
+          {isSuccess && (
+            <Button disabled>
+              <BadgeCheck className="mr-2 h-4 w-4" />
+              Kelompok berhasil disimpan
+            </Button>
+          )}
+          {!isSuccess && (
+            <Button onClick={convert}>
+              <Download className="mr-2 h-4 w-4" />
+              Simpan daftar piket
+            </Button>
+          )}
+        </div>
+      )}
     </>
   );
 }

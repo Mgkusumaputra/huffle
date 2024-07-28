@@ -22,11 +22,13 @@ import { kelompokFormSchema } from "@/lib/form-schema";
 import { groupPickerString } from "@/lib/utils";
 import { GroupPickerDistributionMethod, RandomPickerOptions } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { BadgeCheck, Download, Loader2 } from "lucide-react";
 import { Metadata } from "next";
 import { SetStateAction, useEffect, useState } from "react";
 import { UseFormReturn, useForm, useFormContext } from "react-hook-form";
 import { FaShuffle } from "react-icons/fa6";
 import { z } from "zod";
+import { useToPng } from "@hugocxl/react-to-image";
 
 // export const metadata: Metadata = {
 //   title: "Kelompok",
@@ -66,6 +68,21 @@ export default function Kelompok() {
     const fields = Object.keys(getValues());
     fields.forEach((field) => setValue(field, ""));
   };
+
+  const groupsGenerated = generatedGroups.length > 0;
+
+  // Image Download Handler
+  const [{ isSuccess }, convert] = useToPng<HTMLDivElement>({
+    selector: "#generatedGroup",
+    backgroundColor: "#FFFFFF",
+    onError: (error) => console.log("Error:", error),
+    onSuccess: (data) => {
+      const link = document.createElement("a");
+      link.download = "daftar-kelompok.png";
+      link.href = data;
+      link.click();
+    },
+  });
 
   return (
     <>
@@ -208,29 +225,48 @@ export default function Kelompok() {
         </Form>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5 text-primary-foreground mt-7">
-        {generatedGroups.map((group, index) => (
-          <CardResult
-            key={index}
-            groupIndex={index}
-            jumlahAnggota={group.length}
+      {groupsGenerated && (
+        <div className="flex flex-col gap-4">
+          <div
+            id="generatedGroup"
+            className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5 text-primary-foreground py-7"
           >
-            {group.map((person, index) => (
-              <li
-                className={`flex gap-2 ${
-                  person.representative ? "font-semibold" : "font-normal"
-                }`}
+            {generatedGroups.map((group, index) => (
+              <CardResult
                 key={index}
+                groupIndex={index}
+                jumlahAnggota={group.length}
               >
-                <p>{person.name}</p>
-                {person.representative && (
-                  <Badge variant="default">Ketua Kelompok</Badge>
-                )}
-              </li>
+                {group.map((person, index) => (
+                  <li
+                    className={`flex gap-2 ${
+                      person.representative ? "font-semibold" : "font-normal"
+                    }`}
+                    key={index}
+                  >
+                    <p>{person.name}</p>
+                    {person.representative && (
+                      <Badge variant="default">Ketua Kelompok</Badge>
+                    )}
+                  </li>
+                ))}
+              </CardResult>
             ))}
-          </CardResult>
-        ))}
-      </div>
+          </div>
+          {isSuccess && (
+            <Button disabled>
+              <BadgeCheck className="mr-2 h-4 w-4" />
+              Kelompok berhasil disimpan
+            </Button>
+          )}
+          {!isSuccess && (
+            <Button onClick={convert}>
+              <Download className="mr-2 h-4 w-4" />
+              Simpan daftar kelompok
+            </Button>
+          )}
+        </div>
+      )}
     </>
   );
 }
